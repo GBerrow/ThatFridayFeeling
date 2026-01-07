@@ -1,6 +1,8 @@
 # ThatFridayFeeling
 
-ThatFridayFeeling is a multi-tenant project management and client approval platform designed for digital agencies. It helps agencies manage projects, share deliverables with clients, collect structured feedback and capture formal approvals, all with a clear audit trail.
+ThatFridayFeeling is a multi-tenant approval platform for digital agencies that enforces clear, unambiguous client sign-off on delivered work.
+
+Instead of facilitating ongoing discussion or collaboration, it introduces a hard approval boundary where a specific version of work must be explicitly approved or rejected, with a permanent audit record.
 
 **Ship work faster. Get approvals without the chaos.**
 
@@ -9,11 +11,14 @@ ThatFridayFeeling is a multi-tenant project management and client approval platf
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Product Hypothesis](#product-hypothesis)
 - [Problem Statement](#problem-statement)
-- [Solution](#solution)
-- [Key Features](#key-features)
-- [User Roles](#user-roles)
+- [Design Principles](#design-principles)
+- [MVP Scope](#mvp-scope)
+- [Anti-Features](#anti-features)
+- [What This Is Not](#what-this-is-not)
 - [Core Workflow](#core-workflow)
+- [User Roles](#user-roles)
 - [Tech Stack](#tech-stack)
 - [Architecture Overview](#architecture-overview)
 - [Security & Data Isolation](#security--data-isolation)
@@ -32,40 +37,70 @@ ThatFridayFeeling provides agencies with a centralized platform for managing cli
 
 This project is an independent full-stack SaaS application built with a React frontend and a Django REST API backend.
 
+## Product Hypothesis
+
+This project is built around a single hypothesis:
+
+> Treating client approval as a hard, enforced decision, rather than an informal conversation that eliminates ambiguity and reduces disputes in agency workflows.
+
+ThatFridayFeeling deliberately removes flexibility at the approval stage in order to test whether clarity and finality outperform general-purpose collaboration tools.
+
 ## Problem Statement
 
-Agencies commonly struggle with:
+Despite the availability of modern project management tools, agencies still rely on email, PDFs, and message threads to obtain final client sign-off.
 
-- Fragmented client feedback across multiple tools
-- Unclear approval states and version confusion
-- Lack of accountability around who approved deliverables
-- Poor separation between internal agency work and client-facing views
+This is because most tools treat approval as an informal outcome of discussion rather than a first-class, enforceable action. As a result:
+- “Approved” is implied rather than explicit
+- Feedback is disconnected from specific versions
+- Finality is unclear
+- Accountability is lost
 
-Traditional task management tools focus on internal collaboration but do not provide a structured client approval process.
+## Design Principles
 
-## Solution
+ThatFridayFeeling is intentionally opinionated and constrained.
 
-ThatFridayFeeling introduces a workflow-driven approval system that separates internal project management from client-facing review and sign-off.
+Core design principles:
+- **Approval is binary** – a version is either approved or rejected
+- **Approval is explicit** – approval requires a deliberate user action
+- **Versions are immutable** – approved work cannot be edited
+- **Finality is enforced** – approval locks the workflow
+- **Every decision is attributable** – who approved what, and when, is always recorded
 
-Key design principles:
 
-- Clear project and deliverable ownership
-- Role-based access for agency staff and clients
-- Enforced approval workflows
-- Immutable audit logs for accountability
-- Multi-tenant architecture to support multiple agencies
+## MVP Scope
 
-## Key Features
+The MVP intentionally supports only the following capabilities:
 
-- Multi-tenant organizations (agencies)
-- Project and deliverable management
-- Deliverable versioning
-- Client comments and structured feedback
-- Approval and change-request workflow
-- Role-based access control (RBAC)
-- Audit log for key actions
-- REST API with documented endpoints
-- Responsive React frontend
+- Versioned submissions of work (file or link)
+- Explicit submission for approval
+- Binary client decision: approve or reject
+- Structured rejection reasons (non-conversational)
+- Immutable approval records with timestamps
+- Multi-tenant organization support
+- Role-based access (agency vs client)
+
+Features commonly found in project management tools are deliberately excluded.
+
+## Anti-Features
+
+### Intentional Omissions
+
+ThatFridayFeeling deliberately does NOT support:
+
+- Chat or threaded discussion
+- Free-form comments
+- Task management
+- Custom workflow states
+- Soft or implied approvals
+- Parallel version editing
+- Real-time collaboration
+
+These omissions are intentional. The goal of the MVP is to enforce clarity and finality at the approval stage, not to replace general collaboration tools.
+
+## What This Is Not
+
+This project is not a task manager, collaboration suite, or replacement for tools like ClickUp or Monday.com.
+It is designed to complement existing tools by formalizing the approval moment they handle poorly.
 
 ## User Roles
 
@@ -77,12 +112,21 @@ Permissions are enforced at both the organization and object level.
 
 ## Core Workflow
 
-1. Agency creates a project for a client
-2. Deliverables are uploaded and versioned
-3. Deliverable is submitted for client review
-4. Client provides comments or requests changes
-5. Client approves the deliverable
-6. Approved versions are locked and recorded in the audit log
+### Agency
+1. Upload or link a specific version of work
+2. Mark the version as “Ready for Approval”
+3. The system locks the version
+
+### Client
+4. Views a single, clearly identified version
+5. Must explicitly choose:
+   - Approve
+   - Reject (with a structured reason)
+
+### System
+6. Records the decision with timestamp and approver
+7. Locks the outcome permanently
+
 
 ## Tech Stack
 
@@ -142,12 +186,11 @@ The application follows a decoupled architecture:
 - CI pipeline ensures tests pass before deployment
 
 ## Future Enhancements
-
-- Real-time notifications
-- Advanced reporting and analytics
-- File previews and annotation tools
-- Client-facing public project links
-- Subscription billing for agencies
+- Invite-by-email onboarding
+- Notifications for pending approvals
+- Basic reporting (approval turnaround time)
+- Public share links for approvals
+- Optional “discussion layer” as a separate mode (kept out of MVP)
 
 ## Demo
 
