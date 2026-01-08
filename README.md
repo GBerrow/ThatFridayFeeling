@@ -15,6 +15,7 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
 - [Problem Statement](#problem-statement)
 - [Design Principles](#design-principles)
 - [MVP Scope](#mvp-scope)
+- [MVP Approval Boundary](#mvp-approval-boundary)
 - [Anti-Features](#anti-features)
 - [What This Is Not](#what-this-is-not)
 - [Core Workflow](#core-workflow)
@@ -80,6 +81,55 @@ The MVP intentionally supports only the following capabilities:
 - Role-based access (agency vs client)
 
 Features commonly found in project management tools are deliberately excluded.
+
+---
+
+## MVP Approval Boundary
+
+The MVP is centred around a single, explicit approval boundary.
+
+This boundary represents the moment where flexibility is intentionally removed and a final decision is enforced.
+
+The approval boundary is validated through three core screens:
+
+### 1. Agency – Submit Artifact Version - [View wireframe → Agency – Submit Artifact Version](<docs/wireframes/MVP_Wireframes/Agency – Submit Artifact Version.png>)
+
+The agency submits a specific, immutable version of work for approval.
+
+This screen establishes:
+- Clear project and artifact context
+- Explicit versioning
+- Ownership of submission
+- A single action to request approval
+
+Once submitted, the version is locked and cannot be altered.
+
+### 2. Client – Approval Decision - [View Wireframe → Client - Approval Decision](<docs/wireframes/MVP_Wireframes/Client – Approval Decision.png>)
+
+
+The client is presented with one clear question:
+
+**“Do you approve this version for sign-off?”**
+
+The client must choose one of two irreversible actions:
+- Approve
+- Reject
+
+Approval requires deliberate confirmation and cannot be implied or inferred.
+
+### 3. Audit – Decision Record - [Wireframe → Audit - Decision Record](<docs/wireframes/MVP_Wireframes/Audit – Decision Record.png>)
+
+Once a decision is made, the system creates a permanent audit record.
+
+This screen:
+- Confirms the outcome (approved or rejected)
+- Records who made the decision and when
+- Prevents any further modification
+- Exposes only outcome-appropriate actions
+
+This record replaces informal approval via email or messages.
+
+---
 
 ## Anti-Features
 
