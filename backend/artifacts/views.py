@@ -13,6 +13,18 @@ from .serializers import (
 )
 
 
+class ApiRoot(APIView):
+    """Simple API root that lists primary endpoints for developer convenience."""
+    def get(self, request, format=None):
+        return Response(
+            {
+                'artifact_versions_create': request.build_absolute_uri(
+                    '/api/artifact-versions/'
+                ),
+            }
+        )
+
+
 class ArtifactVersionCreateView(APIView):
     def post(self, request):
         serializer = ArtifactVersionCreateSerializer(data=request.data)
