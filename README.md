@@ -340,12 +340,37 @@ The application follows a decoupled architecture:
 
 ## Testing
 
-> **Note:** Automated tests will be added in subsequent phases; the MVP currently includes only minimal manual verification.
+### Testing Documentation
 
-- Unit and integration tests using `pytest`
-- API tests for core workflows
-- End‑to‑end tests using Playwright
-- Automated tests run via GitHub Actions on pull requests
+
+The MVP includes an automated backend test suite focused on enforcing the approval boundary invariant.  
+Detailed coverage and execution results are documented separately to avoid duplication in this README.
+
+### Testing Documentation
+
+- **[Test Journey](docs/test/test-journey.md)** – Chronological log of what was tested, when, and why. Each entry captures the testing goal, what behaviour was protected, and links to detailed results.
+
+- **[Test Results](docs/test/test-results.md)** – Snapshot of the current test suite, including coverage areas and key invariants proven.
+
+- **[Testing Guide](docs/test/testing-guide.md)** – How to run tests locally and understand test conventions used in the project.
+
+### Testing Workflow
+
+1. Implement or modify backend behaviour
+2. Add or update automated tests to protect the relevant invariant
+3. Run the full test suite locally
+4. Update **test-journey.md** when new behaviour or invariants are introduced
+5. Update **test-results.md** only when test scope or coverage meaningfully changes
+
+### Planned / Future Testing
+
+The following testing areas are intentionally deferred until the relevant features exist:
+
+- End-to-end tests using Playwright (frontend not yet implemented)
+- CI-based test execution via GitHub Actions
+- Performance and load testing
+- Authentication and permission tests
+- Multi-tenant data isolation tests
 
 ---
 
