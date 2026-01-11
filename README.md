@@ -1,6 +1,8 @@
 # ThatFridayFeeling
 
-ThatFridayFeeling is an opinionated approval‑boundary MVP for digital agencies that enforces clear, unambiguous client sign‑off on versioned work.
+ThatFridayFeeling is an opinionated approval‑boundary MVP designed specifically for digital agencies and their clients. It replaces ad-hoc approvals scattered across emails, PDF's, chat threads and project boards with a single, enforceable sign-off moment.
+
+Instead of facilitating ongoing discussion or collaboration, it introduces a hard approval boundary where a specific version of work must be explicitly approved or rejected, with a permanent audit record. This deliberate constraint eliminates ambiguity and ensures everyone knows exactly what was approved, when, and by whom.
 
 Instead of facilitating ongoing discussion or collaboration, it introduces a hard approval boundary where a specific version of work must be explicitly approved or rejected, with a permanent audit record.
 
@@ -10,46 +12,64 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
-- [Product Hypothesis](#product-hypothesis)
-- [Problem Statement](#problem-statement)
-- [Design Principles](#design-principles)
-- [MVP Scope](#mvp-scope)
-- [MVP Approval Boundary](#mvp-approval-boundary)
-- [Approval Boundary API (MVP)](#approval-boundary-api-mvp)
-- [Anti‑Features](#anti-features)
-- [Intentionally Deferred Features](#intentionally-deferred-features)
-- [What This Is Not](#what-this-is-not)
-- [User Roles](#user-roles)
-- [Core Workflow](#core-workflow)
-- [Tech Stack](#tech-stack)
-- [Local Development](#local-development)
-- [Architecture Overview](#architecture-overview)
-- [Security & Data Isolation](#security--data-isolation)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Future Enhancements](#future-enhancements)
-- [Demo](#demo)
+- [ThatFridayFeeling](#thatfridayfeeling)
+  - [Table of Contents](#table-of-contents)
+  - [Project Overview](#project-overview)
+  - [Problem Statement](#problem-statement)
+  - [Audience \& Pain Points](#audience--pain-points)
+    - [Who This Is For](#who-this-is-for)
+    - [What Pain They Feel](#what-pain-they-feel)
+    - [Why Existing Tools Fail Them](#why-existing-tools-fail-them)
+    - [How This Project Solves It - Deliberately](#how-this-project-solves-it---deliberately)
+    - [Product Hypothesis](#product-hypothesis)
+  - [Design Principles](#design-principles)
+  - [MVP Scope](#mvp-scope)
+  - [MVP Approval Boundary](#mvp-approval-boundary)
+    - [1. Agency – Submit Artifact Version](#1-agency--submit-artifact-version)
+    - [2. Client – Approval Decision](#2-client--approval-decision)
+    - [3. Audit – Decision Record](#3-audit--decision-record)
+  - [Approval Boundary API (MVP)](#approval-boundary-api-mvp)
+    - [Endpoints](#endpoints)
+    - [Finality Rules](#finality-rules)
+  - [Anti‑Features](#antifeatures)
+    - [Intentional Omissions](#intentional-omissions)
+  - [Intentionally Deferred Features](#intentionally-deferred-features)
+  - [What This Is Not](#what-this-is-not)
+  - [User Roles](#user-roles)
+  - [Core Workflow](#core-workflow)
+    - [Agency](#agency)
+    - [Client](#client)
+    - [System](#system)
+  - [Tech Stack](#tech-stack)
+    - [Current (MVP Implementation)](#current-mvp-implementation)
+      - [Backend](#backend)
+      - [Frontend](#frontend)
+    - [Planned / Post‑MVP](#planned--postmvp)
+      - [Frontend](#frontend-1)
+      - [Backend](#backend-1)
+      - [Tooling \& Infrastructure](#tooling--infrastructure)
+  - [Local Development](#local-development)
+    - [Backend](#backend-2)
+    - [Frontend](#frontend-2)
+  - [Architecture Overview](#architecture-overview)
+  - [Security \& Data Isolation](#security--data-isolation)
+  - [Testing](#testing)
+    - [Testing Documentation](#testing-documentation)
+    - [Testing Workflow](#testing-workflow)
+    - [Planned / Future Testing](#planned--future-testing)
+  - [Deployment](#deployment)
+  - [Future Enhancements](#future-enhancements)
+  - [Demo](#demo)
 
----
+--- 
 
-## Project Overview
+## Project Overview 
 
 Digital agencies often manage client communication, feedback, and approvals across email, Slack, and project boards. This leads to lost feedback, unclear approval states, and disputes over what was approved and when.
 
 ThatFridayFeeling provides agencies with a centralized platform for managing client‑facing deliverables, collecting structured feedback, and recording formal approvals in a controlled and auditable workflow.
 
 This project is an independent full‑stack SaaS application built with a React frontend and a Django REST API backend.
-
----
-
-## Product Hypothesis
-
-This project is built around a single hypothesis:
-
-> **Treating client approval as a hard, enforced decision, rather than an informal conversation, eliminates ambiguity and reduces disputes in agency workflows.**
-
-ThatFridayFeeling deliberately removes flexibility at the approval stage in order to test whether clarity and finality outperform general‑purpose collaboration tools.
 
 ---
 
@@ -63,6 +83,50 @@ This is because most tools treat approval as an informal outcome of discussion r
 - **Feedback is disconnected from specific versions**
 - **Finality is unclear**
 - **Accountability is lost**
+
+---
+
+## Audience & Pain Points
+
+### Who This Is For 
+
+- **Digital agencies** - Web, design, branding, marketing and product agencies must obtain clear client sign-off before shipping, billing or launching work.
+
+- **Account managers and project leads** - Professionals responsible for delivering work and tracking approvals across multiple clients and projects
+
+- **Clients and stakeholders** - decision-makers who need to review and approve deliverables with confidence that they're looking at the exact version that will be final.
+
+### What Pain They Feel
+
+Digital agencies often juggle approvals across fragmented channels, email threads, PDF attachments, chat messages, comments on project boards and more. This leads to:
+
+- Uncertainty over which version was approved and when.
+- Feedback and approvals that are lost or disconnected from specific versions.
+- Disputes about whether approval was actually given or what changes were requested.
+- Delays to shipping, billing, or launching due to slow or unclear sign-off processes.
+
+### Why Existing Tools Fail Them
+
+Most project management and collaboration tools treat approval as an informal by-product of discussion. A "Looks good!" comment in Slack or an "Approved" email might be interpreted as sign-off, but there's no enforced, verifiable decision. These tools are optimized for conversation, not for capturing a definitive sign-off. They lack:
+
+- **Verison locking** - Ensuring everyone is reviewing the exact same variable.
+- **Madatory decisions** - Forcing an explicit approve or reject action. Rather than implying approval in a comment. 
+- **Immutable audit trails** -  Recording who approved what, when and why in a permanent record.
+
+As a result, approvals become ambiguous, leading to confusion, delays and disputes. **Accountability is lost**.
+
+### How This Project Solves It - Deliberately
+
+ThatFridayFeeling fills this gap by introducing a **hard approval boundary:**
+
+- Agencies submit a specific record version for approval
+- Clients must explicitly **approve** or **reject**. there is no way to imply or infer approval through comments or messages.
+- The system records the decision with a timestamp and approver identity. Creating a permanent, auditable record.
+- Once a decision is made, the outcome is final; any further attempts to approve or reject are blocked.
+
+### Product Hypothesis
+
+By enforcing this boundary, **ThatFridayFeeling** brings clarity, reduces disputes and allows teams to move forward faster with confidence. It complements existing PM and collaboration tools by formalizing the approval moment they handle poorly in comparison.
 
 ---
 
@@ -237,15 +301,15 @@ Permissions will be enforced at both the organization and object level in future
 
 ### Client
 
-4. Views a single, clearly identified version
-5. Must explicitly choose:
+1. Views a single, clearly identified version
+2. Must explicitly choose:
    - **Approve**
    - **Reject** (with a structured reason)
 
 ### System
 
-6. Records the decision with timestamp and approver
-7. Locks the outcome permanently
+1. Records the decision with timestamp and approver
+2. Locks the outcome permanently
 
 ---
 
@@ -253,20 +317,20 @@ Permissions will be enforced at both the organization and object level in future
 
 ### Current (MVP Implementation)
 
-**Backend**
+#### Backend
 
 - Django
 - Django REST Framework
 - SQLite (development)
 - Django Admin
 
-**Frontend**
+#### Frontend
 
 - Not yet implemented (planned React SPA)
 
 ### Planned / Post‑MVP
 
-**Frontend**
+#### Frontend
 
 - React
 - TypeScript
@@ -275,13 +339,13 @@ Permissions will be enforced at both the organization and object level in future
 - TanStack Query
 - Tailwind CSS
 
-**Backend**
+#### Backend
 
 - PostgreSQL
 - Redis
 - Celery
 
-**Tooling & Infrastructure**
+#### Tooling & Infrastructure
 
 - Docker & Docker Compose
 - GitHub Actions (CI)
@@ -342,11 +406,8 @@ The application follows a decoupled architecture:
 
 ### Testing Documentation
 
-
 The MVP includes an automated backend test suite focused on enforcing the approval boundary invariant.  
 Detailed coverage and execution results are documented separately to avoid duplication in this README.
-
-### Testing Documentation
 
 - **[Test Journey](docs/test/test-journey.md)** – Chronological log of what was tested, when, and why. Each entry captures the testing goal, what behaviour was protected, and links to detailed results.
 
