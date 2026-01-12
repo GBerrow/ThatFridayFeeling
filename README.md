@@ -49,8 +49,8 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
       - [Backend](#backend-1)
       - [Tooling \& Infrastructure](#tooling--infrastructure)
   - [Local Development](#local-development)
-    - [Backend](#backend-2)
-    - [Frontend](#frontend-2)
+    - [Quick Start](#quick-start)
+    - [For Detailed Setup, Architecture \& Development Workflow](#for-detailed-setup-architecture--development-workflow)
   - [Architecture Overview](#architecture-overview)
   - [Security \& Data Isolation](#security--data-isolation)
   - [Testing](#testing)
@@ -356,24 +356,39 @@ Permissions will be enforced at both the organization and object level in future
 
 ## Local Development
 
-### Backend
+### Quick Start
 
-To run the backend locally:
+To run both backend and frontend locally:
 
+**Backend:**
 ```bash
+cd backend
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
 
-The API root is available at `http://localhost:8000/api/` and the admin interface at `http://localhost:8000/admin/`.
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### Frontend
+The backend API is available at `http://localhost:8000/api/` and the admin interface at `http://localhost:8000/admin/`. The frontend dev server runs at `http://localhost:5173/`.
 
-Planned for post‑MVP; not yet implemented.
+### For Detailed Setup, Architecture & Development Workflow
+
+See [developer.md](DEVELOPER.md) for:
+- Step-by-step backend and frontend setup
+- Project architecture and structure
+- Key design decisions and why they matter
+- Common development tasks
+- Testing and debugging guidance
+- Troubleshooting
 
 ---
 
