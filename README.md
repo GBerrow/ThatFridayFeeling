@@ -1,5 +1,7 @@
 # ThatFridayFeeling
 
+![ThatFridayFeeling](assets/images/banner.png)
+
 ThatFridayFeeling is an opinionated approval‑boundary MVP designed specifically for digital agencies and their clients. It replaces ad-hoc approvals scattered across emails, PDF's, chat threads and project boards with a single, enforceable sign-off moment.
 
 Instead of facilitating ongoing discussion or collaboration, it introduces a hard approval boundary where a specific version of work must be explicitly approved or rejected, with a permanent audit record. This deliberate constraint eliminates ambiguity and ensures everyone knows exactly what was approved, when, and by whom.
