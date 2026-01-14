@@ -1,9 +1,11 @@
 # Test Results - ThatFridayFeeling MVP
 
-**Test Date:** January 9, 2026  
-**Test Suite:** Approval Boundary MVP  
-**Total Tests:** 23  
+**Test Date:** January 14, 2026  
+**Test Suites:** Backend Approval Boundary (23) + Frontend Components (4)  
+**Total Tests:** 27  
 **Status:** ✅ All Passing
+
+**Note:** Frontend tests now run via GitHub Actions CI on every push/PR. See [test-journey.md](test-journey.md) for details on Jan 14 frontend testing setup.
 
 ---
 

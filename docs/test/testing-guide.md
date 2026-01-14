@@ -1,10 +1,43 @@
 # Testing Guide - ThatFridayFeeling MVP
 
-Quick reference for running and understanding the test suite.
+Quick reference for running and understanding the test suite. Covers both backend and frontend tests.
 
 ---
 
-## Running Tests
+## Running Frontend Tests
+
+### Run All Tests
+```bash
+cd frontend
+npm test
+```
+
+### Run in Watch Mode (auto-rerun on changes)
+```bash
+npm test -- --watch
+```
+
+### Run with Interactive UI
+```bash
+npm test:ui
+```
+Opens browser-based test runner for visual debugging.
+
+---
+
+## Frontend Test Configuration
+
+**Framework:** Vitest v4.0.17  
+**Test Library:** @testing-library/react + happy-dom  
+**Config:** `frontend/vitest.config.js`
+
+**Test files:** Auto-discovered from `src/test/**/*.test.jsx`
+
+Tests validate that React components render correctly and respond to user interactions.
+
+---
+
+## Running Backend Tests
 
 ### Run All Tests
 ```bash
