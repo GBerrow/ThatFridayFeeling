@@ -6,7 +6,7 @@ This test suite validates the core MVP hypothesis:
 - Preventing duplicate/conflicting decisions
 - Ensuring clear, unambiguous approval or rejection
 """
-from django.test import TestCases
+from django.test import TestCase
 from rest_framework.test import APITestCase
 from rest_framework import status
 
