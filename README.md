@@ -51,7 +51,18 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
       - [Backend](#backend-1)
       - [Tooling \& Infrastructure](#tooling--infrastructure)
   - [Local Development](#local-development)
-    - [Quick Start](#quick-start)
+    - [Getting Started (Quick Setup)](#getting-started-quick-setup)
+      - [Prerequisites](#prerequisites)
+      - [Backend Setup (5 minutes)](#backend-setup-5-minutes)
+      - [Frontend Setup (5 minutes)](#frontend-setup-5-minutes)
+      - [Verify Everything Works](#verify-everything-works)
+    - [Demo Walkthrough](#demo-walkthrough)
+      - [Step 1: Submit an Artifact Version (Agency)](#step-1-submit-an-artifact-version-agency)
+      - [Step 2: Approve the Version (Client)](#step-2-approve-the-version-client)
+      - [Step 3: Verify in Approvals Dashboard](#step-3-verify-in-approvals-dashboard)
+      - [Step 4: Test Finality (Try to Approve Again)](#step-4-test-finality-try-to-approve-again)
+      - [Optional: Test Rejection](#optional-test-rejection)
+    - [Quick Start (Original)](#quick-start-original)
     - [For Detailed Setup, Architecture \& Development Workflow](#for-detailed-setup-architecture--development-workflow)
   - [Architecture Overview](#architecture-overview)
   - [Security \& Data Isolation](#security--data-isolation)
@@ -358,39 +369,117 @@ Permissions will be enforced at both the organization and object level in future
 
 ## Local Development
 
-### Quick Start
+### Getting Started (Quick Setup)
 
-To run both backend and frontend locally:
+#### Prerequisites
 
-**Backend:**
+- **Python 3.13+** (backend)
+- **Node.js 18+** and npm (frontend)
+- **Git**
+
+#### Backend Setup (5 minutes)
+
 ```bash
+# 1. Navigate to backend directory
 cd backend
+
+# 2. Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/Scripts/activate  # On Windows: venv\Scripts\activate
+
+# 3. Install dependencies
 pip install -r requirements.txt
+
+# 4. Run database migrations
 python manage.py migrate
+
+# 5. Create a superuser (optional, for Django admin)
 python manage.py createsuperuser
+
+# 6. Start the development server
 python manage.py runserver
 ```
 
-**Frontend:**
+Backend is now running at **http://localhost:8000**
+
+**To access Django admin:** http://localhost:8000/admin/
+
+#### Frontend Setup (5 minutes)
+
 ```bash
+# 1. Navigate to frontend directory (from project root)
 cd frontend
+
+# 2. Install dependencies
 npm install
+
+# 3. Start the development server
 npm run dev
 ```
 
-The backend API is available at `http://localhost:8000/api/` and the admin interface at `http://localhost:8000/admin/`. The frontend dev server runs at `http://localhost:5173/`.
+Frontend is now running at **http://localhost:5173**
 
-### For Detailed Setup, Architecture & Development Workflow
+#### Verify Everything Works
 
-See [developer.md](DEVELOPER.md) for:
-- Step-by-step backend and frontend setup
-- Project architecture and structure
-- Key design decisions and why they matter
-- Common development tasks
-- Testing and debugging guidance
-- Troubleshooting
+1. Open http://localhost:5173 in your browser
+2. You should see the ThatFridayFeeling home page with dark blue background
+3. Click "Submit" → try creating an artifact and submitting a version
+4. If successful, backend and frontend are communicating ✅
+
+---
+
+### Demo Walkthrough
+
+**Time:** ~2 minutes  
+**What it shows:** Full end-to-end approval workflow
+
+#### Step 1: Submit an Artifact Version (Agency)
+
+1. Go to http://localhost:5173/submit
+2. Fill in the form:
+   - **Artifact Name:** `Q1 Marketing Campaign`
+   - **Artifact Type:** `Design` (optional)
+   - **Version URL:** `https://example.com/campaign.pdf`
+   - **Submitted By:** `agency@example.com`
+3. Click **"Create Artifact & Submit Version"**
+4. See success message with link to approval page ✅
+
+#### Step 2: Approve the Version (Client)
+
+1. Click the link in the success message (or manually navigate to the approval page)
+2. You should see:
+   - Version ID and status
+   - The submitted URL
+   - Submission details
+3. Fill in:
+   - **Your email:** `client@example.com`
+4. Click **"Approve"**
+5. See confirmation: "Decision submitted successfully!" ✅
+
+#### Step 3: Verify in Approvals Dashboard
+
+1. Click **"Approvals"** in the top navigation
+2. You should see:
+   - **0 Awaiting** | **1 Approved** | **0 Rejected**
+   - The version you just approved listed under "Approved (1)"
+   - Decision details showing who approved it and when
+
+#### Step 4: Test Finality (Try to Approve Again)
+
+1. Click **"Review & Decide"** on the same version
+2. Try clicking **"Approve"** again
+3. You should see an error: **"This version has already been decided"** ✅
+   - This proves the system enforces finality
+
+#### Optional: Test Rejection
+
+1. Go back to Submit page
+2. Create another artifact (e.g., `Q2 Campaign`)
+3. On the approval page, fill in:
+   - **Your email:** `client@example.com`
+   - **Reason:** `Colors don't match brand guidelines`
+4. Click **"Reject"**
+5. See it appear in the Approvals dashboard under **"Rejected (1)"**
 
 ---
 

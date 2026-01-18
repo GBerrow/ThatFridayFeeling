@@ -1,5 +1,34 @@
 # Test Journey (Changelog)
 
+## 2026-01-18 — UI Polish & Demo Readiness ✅
+**Goal:** Polish UI to demo-ready state and validate complete end-to-end workflow.
+
+**Completed:**
+- Dark blue gradient background with dot pattern overlay (matching banner design)
+- Fixed spacing throughout app (cards, forms, buttons, grid items)
+- Centered layout on all pages
+- Input forms properly constrained within cards
+- All pages use consistent design system (typography, colors, spacing)
+
+**Testing Validation:**
+- ✅ 4 frontend tests passing (`npm test -- --run`)
+- ✅ 23 backend tests passing (`python manage.py test artifacts`)
+- ✅ Manual workflow testing:
+  - Submit artifact version → Success
+  - Approve version → Decision recorded
+  - Reject version → Decision recorded
+  - Verify finality (try to approve twice) → 409 Conflict
+- ✅ Approvals dashboard: counts update correctly, filtering works
+- ✅ No console errors or warnings
+
+**Documentation Updated:**
+- README.md: Added "Getting Started" and "Demo Walkthrough" sections
+- All test files updated to reflect v0.1.0 status
+
+**Status:** ✅ v0.1.0 ready for release
+
+---
+
 ## 2026-01-14 — Frontend Tests + GitHub Actions CI ✅
 **Goal:** Add automated testing to frontend and set up CI/CD pipeline for regression protection.
 
@@ -53,4 +82,4 @@
 
 ---
 
-*Last Updated: January 9, 2026*
+*Last Updated: January 18, 2026*
