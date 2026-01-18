@@ -10,7 +10,14 @@ import { SubmitArtifactPage } from '../pages/SubmitArtifactPage'
 import { testFormComponent } from './helpers/testFormComponent'
 
 // Test 1: Does the form have the required input fields?
-test('has input fields for URL and artifact ID', testFormComponent(SubmitArtifactPage, ['URL', 'Artifact ID'], 'submit'))
+test(
+  'has input fields for artifact details and version URL',
+  testFormComponent(
+    SubmitArtifactPage,
+    ['Q1 Marketing Campaign', 'PDF, Design, Document', 'artifact.pdf', 'your@email.com'],
+    'submit'
+  )
+)
 
 // Test 2: Does it have a submit button?
 test('has a submit button', () => {
