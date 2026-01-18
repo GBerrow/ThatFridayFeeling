@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from approvals.models import ApprovalDecision
-from .models import ArtifactVersion
+from .models import Artifact, ArtifactVersion
 from .serializers import (
     ApprovalDecisionSerializer,
+    ArtifactCreateSerializer,
+    ArtifactSerializer,
     ArtifactVersionCreateSerializer,
     ArtifactVersionSerializer,
 )
@@ -25,7 +27,29 @@ class ApiRoot(APIView):
         )
 
 
+class ArtifactCreateView(APIView):
+    def post(self, request):
+        serializer = ArtifactCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        artifact = serializer.save()
+        return Response(ArtifactSerializer(artifact).data, status=status.HTTP_201_CREATED)
+
+
 class ArtifactVersionCreateView(APIView):
+    def get(self, request):
+        """List all artifact versions, optionally filtered by status."""
+        status_filter = request.query_params.get('status')
+        
+        versions = ArtifactVersion.objects.select_related('approval_decision').all().order_by('-created_at')
+        serializer = ArtifactVersionSerializer(versions, many=True)
+        
+        # Filter by status in Python since it's computed
+        data = serializer.data
+        if status_filter:
+            data = [v for v in data if v['status'] == status_filter]
+        
+        return Response(data)
+
     def post(self, request):
         serializer = ArtifactVersionCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

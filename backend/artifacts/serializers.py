@@ -1,7 +1,8 @@
+from django.db import models
 from rest_framework import serializers
 
 from approvals.models import ApprovalDecision
-from .models import ArtifactVersion
+from .models import Artifact, ArtifactVersion
 
 
 class ApprovalDecisionSerializer(serializers.ModelSerializer):
@@ -39,4 +40,45 @@ class ArtifactVersionSerializer(serializers.ModelSerializer):
 class ArtifactVersionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArtifactVersion
-        fields = ['artifact', 'version_number', 'url', 'submitted_by']
+        fields = ['artifact', 'url', 'submitted_by']
+
+    def create(self, validated_data):
+        """Auto-assign the next version number if not provided."""
+        artifact = validated_data['artifact']
+        
+        # Get the highest version number for this artifact
+        max_version = ArtifactVersion.objects.filter(
+            artifact=artifact
+        ).aggregate(models.Max('version_number'))['version_number__max'] or 0
+        
+        # Set the next version number
+        validated_data['version_number'] = max_version + 1
+        
+        return super().create(validated_data)
+
+
+class ArtifactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Artifact
+        fields = ['id', 'project', 'name', 'artifact_type', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
+
+class ArtifactCreateSerializer(serializers.ModelSerializer):
+    """Simple serializer for creating artifacts with just name and type."""
+    class Meta:
+        model = Artifact
+        fields = ['name', 'artifact_type']
+    
+    def create(self, validated_data):
+        """Create artifact with a default project."""
+        from .models import Project
+        
+        # Get or create a default project
+        default_project, _ = Project.objects.get_or_create(
+            name='Default Project',
+            defaults={'name': 'Default Project'}
+        )
+        
+        validated_data['project'] = default_project
+        return super().create(validated_data)
