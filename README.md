@@ -1,6 +1,17 @@
 # ThatFridayFeeling
 
+## 🚀 Live Demo
+
+The MVP is now deployed and fully functional!
+
+**[→ Try the Live Frontend](https://thatfridayfeeling-frontend.onrender.com)**
+
+See the 2-minute demo walkthrough below to understand the approval boundary in action.
+
+
 ![ThatFridayFeeling](assets/images/banner.png)
+
+---
 
 ThatFridayFeeling is an opinionated approval‑boundary MVP designed specifically for digital agencies and their clients. It replaces ad-hoc approvals scattered across emails, PDF's, chat threads and project boards with a single, enforceable sign-off moment.
 
@@ -15,6 +26,7 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
 ## Table of Contents
 
 - [ThatFridayFeeling](#thatfridayfeeling)
+  - [🚀 Live Demo](#-live-demo)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
   - [Problem Statement](#problem-statement)
@@ -62,8 +74,6 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
       - [Step 3: Verify in Approvals Dashboard](#step-3-verify-in-approvals-dashboard)
       - [Step 4: Test Finality (Try to Approve Again)](#step-4-test-finality-try-to-approve-again)
       - [Optional: Test Rejection](#optional-test-rejection)
-    - [Quick Start (Original)](#quick-start-original)
-    - [For Detailed Setup, Architecture \& Development Workflow](#for-detailed-setup-architecture--development-workflow)
   - [Architecture Overview](#architecture-overview)
   - [Security \& Data Isolation](#security--data-isolation)
   - [Testing](#testing)
@@ -71,6 +81,8 @@ Instead of facilitating ongoing discussion or collaboration, it introduces a har
     - [Testing Workflow](#testing-workflow)
     - [Planned / Future Testing](#planned--future-testing)
   - [Deployment](#deployment)
+    - [✅ Current Deployment (v0.1.0)](#-current-deployment-v010)
+    - [Deployment Architecture](#deployment-architecture)
   - [Future Enhancements](#future-enhancements)
   - [Demo](#demo)
 
@@ -339,7 +351,12 @@ Permissions will be enforced at both the organization and object level in future
 
 #### Frontend
 
-- Not yet implemented (planned React SPA)
+- React 18
+- TypeScript
+- Vite
+- React Router
+- Tailwind CSS (dark mode)
+- Deployed on Render
 
 ### Planned / Post‑MVP
 
@@ -543,12 +560,22 @@ The following testing areas are intentionally deferred until the relevant featur
 
 ## Deployment
 
-> **Note:** Deployment details are planned for future phases. The MVP runs locally using the Django development server.
+### ✅ Current Deployment (v0.1.0)
 
-- Backend and frontend are containerised using Docker
-- Deployed using a cloud platform (e.g. Render or Railway)
-- PostgreSQL managed database
-- CI pipeline ensures tests pass before deployment
+**Frontend Static Site:** Render  
+**Backend Web Service:** Render  
+**Database:** Render PostgreSQL (Free tier)  
+
+**Live URLs:**
+- Frontend: https://thatfridayfeeling-frontend.onrender.com
+- Backend API: https://thatfridayfeeling.onrender.com/api/
+
+### Deployment Architecture
+
+- **Frontend:** Static site build with `npm run build` → Vite output to `dist/`
+- **Backend:** Gunicorn WSGI server with Django migrations on startup
+- **Database:** PostgreSQL 16 on Render (1 GB free tier)
+- **Auto-Deploy:** Enabled on commits to `main` branch
 
 ---
 
@@ -564,6 +591,8 @@ The following testing areas are intentionally deferred until the relevant featur
 
 ## Demo
 
-Demo credentials and a live deployment link will be provided once the core MVP is complete.
+**The MVP is live!** Visit **[ThatFridayFeeling Frontend](https://thatfridayfeeling-frontend.onrender.com)** to try the 2-minute demo walkthrough above.
+
+No credentials needed — create a test approval and see finality enforcement in action.
 
 ---
