@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 
 // Get the API URL from environment variables
-// Falls back to localhost:8000 if not set (for safe development)
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// Falls back to Render backend for production, localhost:8000 for development
+const API_BASE = import.meta.env.VITE_API_URL || "https://thatfridayfeeling.onrender.com";
 
 // ============================================================================
 // TYPE DEFINITIONS
