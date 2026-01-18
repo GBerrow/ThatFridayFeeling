@@ -3,9 +3,17 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.92);
+
+  /* Design system CSS variables - reused across all components */
+  --bg-dark: #0a0e1a; /* Darkest blue background */
+  --bg-mid: #101728; /* Medium blue background */
+  --text: rgba(255, 255, 255, 0.92); /* Primary text color */
+  --muted: rgba(255, 255, 255, 0.55); /* Secondary/muted text */
+  --border: rgba(255, 255, 255, 0.1); /* Subtle border color */
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.35); /* Consistent shadow depth */
+  --primary: #4f7cff; /* Primary blue accent color */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,54 +23,104 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #7da1ff;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #a8c0ff;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 32px 24px;
   min-width: 320px;
   min-height: 100vh;
+  box-sizing: border-box;
+  
+  /* Center content both horizontally and vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* Three-layer background:
+     1. Radial glow at bottom-left (blue circle that fades out)
+     2. Radial glow at top-right (blue circle that fades out)
+     3. Linear gradient base (dark navy top → mid navy middle → dark navy bottom)
+     These layers create the banner-like aesthetic with soft blue highlights */
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(79, 124, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(79, 124, 255, 0.06) 0%,
+      transparent 50%
+    ),
+    linear-gradient(180deg, #0a0e1a 0%, #101728 50%, #0d1220 100%);
+
+  /* Fixed background = stays in place while content scrolls (parallax effect) */
+  background-attachment: fixed;
+}
+
+/* Dot pattern overlay using CSS pseudo-element */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0; /* Covers entire viewport */
+  pointer-events: none; /* Doesn't interfere with clicking */
+
+  /* Creates a repeating grid of tiny white dots (1px circles, 24px apart)
+     Opacity 0.03 = very subtle texture, like halftone in the banner */
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+
+  z-index: 0; /* Behind all content */
+}
+
+/* Root element needs z-index above the dot pattern */
+#root {
+  position: relative;
+  z-index: 1;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2.4em;
+  line-height: 1.2;
+  margin: 0 0 8px;
 }
 
+h2 {
+  font-size: 1.6em;
+  line-height: 1.25;
+  margin: 0 0 6px;
+}
+
+/* Button base styles - used globally, enhanced by .btn and .btnPrimary classes */
 button {
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.7em 1.4em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--text);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: rgba(79, 124, 255, 0.6);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  outline: 3px solid rgba(79, 124, 255, 0.4);
+  outline-offset: 2px;
 }
