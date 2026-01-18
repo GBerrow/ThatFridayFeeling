@@ -18,6 +18,14 @@ export interface ApprovalDecision {
   note?: string;
 }
 
+export interface Artifact {
+  id: number;
+  project: number;
+  name: string;
+  artifact_type: string;
+  created_at: string;
+}
+
 export interface ArtifactVersion {
   id: number;
   artifact: number;
@@ -33,6 +41,34 @@ export interface ArtifactVersion {
 // API FUNCTIONS
 // ============================================================================
 // These functions call the backend API and return data
+
+/**
+ * Create a new artifact
+ *
+ * Called when an agency wants to create a new artifact for submission.
+ */
+export async function createArtifact(
+  name: string,
+  artifactType: string = ""
+): Promise<Artifact> {
+  const res = await fetch(`${API_BASE}/api/artifacts/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      artifact_type: artifactType,
+    }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.log("Full error response:", errorData);
+    const errorMessage = errorData.detail || JSON.stringify(errorData) || "Failed to create artifact";
+    throw new Error(errorMessage);
+  }
+
+  return res.json();
+}
 
 /**
  * Create a new artifact version
@@ -53,14 +89,15 @@ export async function createArtifactVersion(
       artifact: artifactId,
       url,
       submitted_by: submittedBy,
-      // version_number is auto-assigned by backend, so don't include it
     }),
   });
 
   // If the response it not 201 Created, throw an error
   if (!res.ok) {
     const errorData = await res.json();
-    throw new Error(errorData.detail || "Failed to create version");
+    console.log("Full error response:", errorData);  // Log everything for debugging
+    const errorMessage = errorData.detail || JSON.stringify(errorData) || "Failed to create version";
+    throw new Error(errorMessage);
   }
 
   return res.json();
@@ -73,12 +110,44 @@ export async function createArtifactVersion(
  * Returns the version details + decision (if made).
  */
 export async function getArtifactVersion(versionId: number): Promise<ArtifactVersion> {
-  const res = await fetch(`${API_BASE}/api/artifact-versions/${versionId}/`, {
+  const url = `${API_BASE}/api/artifact-versions/${versionId}/`
+  console.log('Fetching version from:', url)
+  
+  const res = await fetch(url, {
+    method: 'GET',
+  })
+
+  console.log('Response status:', res.status)
+  
+  if (!res.ok) {
+    const errorText = await res.text()
+    console.log('Error response:', errorText)
+    throw new Error('Version not found')
+  }
+
+  const data = await res.json()
+  console.log('Fetched version:', data)
+  return data
+}
+
+/**
+ * List all artifact versions
+ * 
+ * Called to show all versions awaiting approval.
+ * Optionally filter by status: 'AWAITING_APPROVAL', 'APPROVED', 'REJECTED'
+ */
+export async function listArtifactVersions(status?: string): Promise<ArtifactVersion[]> {
+  const url = new URL(`${API_BASE}/api/artifact-versions/`)
+  if (status) {
+    url.searchParams.append('status', status)
+  }
+  
+  const res = await fetch(url.toString(), {
     method: 'GET',
   })
 
   if (!res.ok) {
-    throw new Error('Version not found')
+    throw new Error('Failed to fetch versions')
   }
 
   return res.json()
